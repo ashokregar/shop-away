@@ -1,0 +1,40 @@
+plugins {
+    id 'java'
+    id 'com.github.johnrengelman.shadow' version '7.1.0'
+}
+
+group 'org.showaway'
+version '1.0.0-SNAPSHOT'
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+dependencies {
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.7.0'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.7.0'
+
+    implementation 'org.postgresql:postgresql:42.2.24'
+    implementation 'io.dropwizard:dropwizard-core:2.0.10'
+}
+
+test {
+    useJUnitPlatform()
+}
+
+jar {
+    manifest {
+        attributes(
+                'Main-Class': 'com.shopaway.ShopAwayApplication'
+        )
+    }
+}
+
+repositories {
+    mavenCentral()
+}
+
+shadowJar {
+    mergeServiceFiles()
+}
+
+build.dependsOn shadowJar
