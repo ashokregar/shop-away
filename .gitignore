@@ -25,3 +25,4 @@ hs_err_pid*
 
 # java build folder
 backend/ShopAway/build/*
+backend/ShopAway/.gradle/*
