@@ -1,6 +1,7 @@
 package com.shopaway.resources;
 
 import com.codahale.metrics.annotation.Timed;
+import com.shopaway.pojo.Address;
 import com.shopaway.pojo.User;
 import com.shopaway.service.UserService;
 import util.PostgresConn;
@@ -8,8 +9,9 @@ import util.PostgresConn;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import java.sql.Connection;
-import java.sql.ResultSet;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.atomic.AtomicLong;
 
 @Path("/users")
@@ -26,17 +28,22 @@ public class UserController {
     @POST
     @Timed
     @Path("/get")
-    public User getUser(User user) {
+    public Map<String, Object> getUser(User user) {
         Connection conn = postgresConn.getConnection();
         System.out.println(user.getPassword());
 
         UserService userService = new UserService(conn);
         List<User> users = userService.queryUser(user);
         System.out.println(users);
+        List<Address> addresses = userService.getAddressesOfUser(users.get(0).getId());
+        System.out.println(addresses);
 
         postgresConn.commit();
         postgresConn.closeConnection();
-        return users.get(0);
+        Map <String, Object> result = new HashMap<>();
+        result.put("user", users.get(0));
+        result.put("addresses", addresses);
+        return  result;
     }
 
     @POST
@@ -44,22 +51,72 @@ public class UserController {
     @Path("/create")
     public Object addUser(User user) {
         Connection conn = postgresConn.getConnection();
-        System.out.println( user.getCreatedOn());
+        System.out.println( user);
         UserService userService = new UserService(conn);
         //check if user exist
         List<User> users = userService.queryUser(user);
         if(!users.isEmpty()){
-            return false;
+            return "User already exist!";
         }
-        ResultSet resultSet = userService.insertUser(user);
-        System.out.println("Before Commit");
-        System.out.println(resultSet);
+        User user1 = userService.insertUser(user);
         postgresConn.commit();
         postgresConn.closeConnection();
-        System.out.println("After Commit");
-        System.out.println(resultSet);
+        System.out.println(user1);
+        return user1;
+    }
+
+    @POST
+    @Timed
+    @Path("/update")
+    public Object updateUser(User user) {
+        Connection conn = postgresConn.getConnection();
+        System.out.println( user.getCreatedOn());
+        UserService userService = new UserService(conn);
+        //check if user exist
+        List<User> users = userService.queryUser(user);
+        if(users.isEmpty()){
+            return false;
+        }
+        User user1 = userService.updateUser(user);
+        postgresConn.commit();
+        postgresConn.closeConnection();
+        System.out.println(user1);
         return user;
     }
+
+    @POST
+    @Timed
+    @Path("/address/add")
+    public Address addAddress(Address address) {
+        Connection conn = postgresConn.getConnection();
+        System.out.println(address);
+        UserService userService = new UserService(conn);
+        //check if user exist
+        Address[] addresses = new Address[1];
+        addresses[0] = address;
+        Address[] allAddress = userService.insertAddress(addresses);
+        postgresConn.commit();
+        postgresConn.closeConnection();
+        System.out.println(allAddress);
+        return allAddress[0];
+    }
+
+    @POST
+    @Timed
+    @Path("/address/delete")
+    public boolean deleteAddres(String id) {
+        Connection conn = postgresConn.getConnection();
+        System.out.println( id);
+        UserService userService = new UserService(conn);
+        //check if user exist
+
+        boolean deleted = userService.deleteAddress(id);
+        postgresConn.commit();
+        postgresConn.closeConnection();
+        System.out.println(deleted);
+        return deleted;
+    }
+
 
 }
 

@@ -38,7 +38,7 @@ public class ProductController {
         System.out.println(category);
 
         ProductService productService = new ProductService(conn);
-        List<Product> products = productService.queryProducts(category);
+        List<Product> products = productService.queryProductsFromCategory(category);
         System.out.println(products);
 
         postgresConn.commit();

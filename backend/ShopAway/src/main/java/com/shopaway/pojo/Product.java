@@ -5,7 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.Date;
 
 public  class Product {
-    private long id;
+    private String id;
     private String name;
     private String description;
     private String seller;
@@ -14,13 +14,14 @@ public  class Product {
     private String category;
     private Date createdOn;
     private String imageIds;
+    private int qty;
 
 
     public Product() {
 
     }
 
-    public Product(long id, String name, String description, String seller, int price, String rating, String category, Date createdOn, String imageIds) {
+    public Product(String id, String name, String description, String seller, int price, String rating, String category, Date createdOn, String imageIds) {
         this.id = id;
         this.name = name;
         this.description = description;
@@ -45,7 +46,7 @@ public  class Product {
     }
 
     @JsonProperty
-    public long getId() {
+    public String getId() {
         return id;
     }
 
@@ -84,6 +85,16 @@ public  class Product {
     @JsonProperty
     public String getImageIds() {
         return imageIds;
+    }
+
+    @JsonProperty
+    public int getQty(){
+        return qty;
+    }
+
+    @JsonProperty
+    public void setQty(int qty){
+        this.qty = qty;
     }
 
 }

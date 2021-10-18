@@ -3,6 +3,7 @@ package com.shopaway;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.shopaway.pojo.Product;
+import com.shopaway.resources.OrderController;
 import com.shopaway.resources.ProductController;
 import com.shopaway.resources.UserController;
 import com.shopaway.health.TemplateHealthCheck;
@@ -47,7 +48,7 @@ public class ShopAwayApplication extends Application<ShopAwayConfiguration> {
             stmt = conn.createStatement();
             try{
                 String userSql = "CREATE TABLE IF NOT EXISTS USERS \n" +
-                        "(id SERIAL PRIMARY KEY     NOT NULL," +
+                        "(id TEXT PRIMARY KEY     NOT NULL," +
                         " name           TEXT    NOT NULL, " +
                         " username       TEXT    NOT NULL, " +
                         " password       TEXT    NOT NULL, " +
@@ -58,13 +59,15 @@ public class ShopAwayApplication extends Application<ShopAwayConfiguration> {
                         ");";
                 stmt.executeUpdate(userSql);
             }catch (Exception e){
-                e.printStackTrace();
+//                e.printStackTrace();
+                System.out.println("Failed in users table " + e.getMessage());
             }
 
             try{
                 String productSql = "CREATE TABLE PRODUCTS " +
-                        "(id SERIAL PRIMARY KEY     NOT NULL," +
+                        "(id TEXT PRIMARY KEY     NOT NULL," +
                         " name           TEXT    NOT NULL, " +
+                        " qty INT, " +
                         " description TEXT, " +
                         " image_ids  TEXT," +
                         " price            INT     NOT NULL, " +
@@ -80,8 +83,6 @@ public class ShopAwayApplication extends Application<ShopAwayConfiguration> {
                         " created_on TIMESTAMP NOT NULL " +
                         ")";
                 stmt.executeUpdate(imageSql);
-
-
 
                 ProductService productService = new ProductService(conn);
                 // create object mapper instance
@@ -116,14 +117,40 @@ public class ShopAwayApplication extends Application<ShopAwayConfiguration> {
                 productService.insertProducts(products);
             }catch (Exception e){
 //                e.printStackTrace();
-
+                System.out.println("Failed in products " + e.getMessage());
             }
+
+            try{
+                String orderSql = "CREATE TABLE ORDERS " +
+                        "(id TEXT PRIMARY KEY    NOT NULL," +
+                        " address_id VARCHAR NOT NULL," +
+                        " products_json_str    TEXT    NOT NULL, " +
+                        " created_on TIMESTAMP NOT NULL, " +
+                        " status TEXT NOT NULL, " +
+                        " user_id  TEXT NOT NULL )";
+                stmt.executeUpdate(orderSql);
+
+                String addressSql = "CREATE TABLE ADDRESSES " +
+                        "(id TEXT PRIMARY KEY    NOT NULL," +
+                        " street  TEXT NOT NULL," +
+                        " city    TEXT    NOT NULL, " +
+                        " state    TEXT    NOT NULL, " +
+                        " pin    INT    NOT NULL, " +
+                        " created_on TIMESTAMP NOT NULL, " +
+                        " user_id TEXT NOT NULL )";
+                stmt.executeUpdate(addressSql);
+
+            }catch (Exception e){
+//                e.printStackTrace();
+                System.out.println("Failed in orders And addresses " + e.getMessage());
+            }
+
 
 
 
         } catch (SQLException e) {
 //            e.printStackTrace();
-            System.out.println(e.getErrorCode());
+//            System.out.println(e.getMessage());
         }
 
         postgresConn.commit();
@@ -144,12 +171,16 @@ public class ShopAwayApplication extends Application<ShopAwayConfiguration> {
         final ProductController productController = new ProductController(
                 new PostgresConn()
         );
+        final OrderController orderController = new OrderController(
+                new PostgresConn()
+        );
         final TemplateHealthCheck healthCheck =
             new TemplateHealthCheck(configuration.getTemplate());
         environment.healthChecks().register("template", healthCheck);
         environment.jersey().register(resource);
         environment.jersey().register(userController);
         environment.jersey().register(productController);
+        environment.jersey().register(orderController);
     }
 
 }

@@ -5,7 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.Date;
 
 public  class User {
-    private long id;
+    private String id;
     private String name;
     private String username;
     private String password;
@@ -18,8 +18,18 @@ public  class User {
 
     }
 
-    public User(long id, String name, String username, String password, String mobile, String email, Date createdOn, Date lastLogin) {
-        this.id = id;
+
+    /**
+     * Atomically sets the value to the given updated value if the current value == the expected value.
+     *  @param name name
+     *  @param username username
+     *  @param password password
+     *  @param mobile mobile number
+     *  @param email email id
+     *  @param createdOn created date
+     *  @param lastLogin last login date
+    **/
+    public User( String name, String username, String password, String mobile, String email, Date createdOn, Date lastLogin) {
         this.name = name;
         this.username = username;
         this.password = password;
@@ -30,7 +40,7 @@ public  class User {
     }
 
     @JsonProperty
-    public long getId() {
+    public String getId() {
         return id;
     }
 
@@ -64,6 +74,20 @@ public  class User {
     @JsonProperty
     public Date getLastLogin() {
         return lastLogin;
+    }
+
+    @JsonProperty
+    public void setId(String id){
+        this.id = id;
+    }
+
+    @JsonProperty
+    public void setCreatedOn(Date createdOn){
+        this.createdOn = createdOn;
+    }
+    @JsonProperty
+    public void setLastLogin(Date lastLogin){
+        this.lastLogin = lastLogin;
     }
 
 }
