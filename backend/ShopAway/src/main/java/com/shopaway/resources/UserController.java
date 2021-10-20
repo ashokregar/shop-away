@@ -87,12 +87,12 @@ public class UserController {
     @POST
     @Timed
     @Path("/delete")
-    public boolean deleteUser(String id) {
+    public boolean deleteUser(User user) {
         Connection conn = postgresConn.getConnection();
-        System.out.println(id);
+        System.out.println(user);
         UserService userService = new UserService(conn);
         //check if user exist
-        boolean deleted = userService.deleteUser(id);
+        boolean deleted = userService.deleteUser(user.getId());
 
         postgresConn.commit();
         postgresConn.closeConnection();

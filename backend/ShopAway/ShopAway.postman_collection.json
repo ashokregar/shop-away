@@ -1,0 +1,270 @@
+{
+	"variables": [],
+	"info": {
+		"name": "ShopAway",
+		"_postman_id": "9b567fc3-0b66-ccc3-4bdc-a2d3497c2976",
+		"description": "",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "localhost:8080/hello-world?name=Ashok",
+			"request": {
+				"url": {
+					"raw": "localhost:8080/hello-world?name=Ashok",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"hello-world"
+					],
+					"query": [
+						{
+							"key": "name",
+							"value": "Ashok",
+							"equals": true,
+							"description": ""
+						}
+					],
+					"variable": []
+				},
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "localhost:8080/users/create",
+			"request": {
+				"url": "localhost:8080/users/create",
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\": \"Ashok aJKKJ\",\n    \"username\": \"regar0234\",\n    \"password\": \"122234234\",\n    \"mobile\": \"9898\",\n    \"email\": \"regar.as\",\n    \"createdOn\": \"2021-10-13T09:20:00.031Z\",\n    \"lastLogin\": \"2021-10-13T09:20:00.031Z\"\n}"
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "localhost:8080/users/address/add",
+			"request": {
+				"url": "localhost:8080/users/address/add",
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"street\": \"124 street\",\n\t\"state\": \"Rajasthan\",\n\t\"city\": \"Mumbai\",\n\t\"pin\": 546567,\n\t\"userId\": \"0b75df4d-f605-4523-88ea-58baabcee635\"\n}"
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "localhost:8080/products",
+			"request": {
+				"url": {
+					"raw": "localhost:8080/products?category=Hand Blenders",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"products"
+					],
+					"query": [
+						{
+							"key": "category",
+							"value": "Hand Blenders",
+							"equals": true,
+							"description": ""
+						}
+					],
+					"variable": []
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"category\": \"Mixers And Grinder\"\n}"
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:8080/products/image?id=6ed317aa-1235-4e33-97e5-2ae16f258797",
+			"request": {
+				"url": {
+					"raw": "http://localhost:8080/products/image?id=6ed317aa-1235-4e33-97e5-2ae16f258797",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"products",
+						"image"
+					],
+					"query": [
+						{
+							"key": "id",
+							"value": "6ed317aa-1235-4e33-97e5-2ae16f258797",
+							"equals": true,
+							"description": ""
+						}
+					],
+					"variable": []
+				},
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "localhost:8080/users/get",
+			"request": {
+				"url": "localhost:8080/users/get",
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"username\": \"regar01207\",\n\t\"password\": \"12223as\"\n}"
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "localhost:8080/orders/get?id=83998e0a-41ec-4f8b-8ef1-9b0e7651e5ad",
+			"request": {
+				"url": {
+					"raw": "localhost:8080/orders/get?id=83998e0a-41ec-4f8b-8ef1-9b0e7651e5ad",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"orders",
+						"get"
+					],
+					"query": [
+						{
+							"key": "id",
+							"value": "83998e0a-41ec-4f8b-8ef1-9b0e7651e5ad",
+							"equals": true,
+							"description": ""
+						}
+					],
+					"variable": []
+				},
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:8080/orders/new",
+			"request": {
+				"url": "http://localhost:8080/orders/new",
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"products\": [\n\t\t{\n\t\t\t\"id\": \"9c083de6-6300-4ad2-8284-eb848b7d309a\",\n        \t\"qty\": 2\n\t\t},\n\t\t{\n\t\t\t\"id\": \"e8691aac-df60-4a06-8f58-a8e187bf26fa\",\n\t\t\t\"qty\": 1\n\t\t},\n\t\t{\n\t\t\t\"id\": \"b8917935-53fd-47a3-abcb-184268e9f580\",\n\t\t\t\"qty\": 4\n\t\t}\n\t],\n    \"address\": {\n    \t\"id\": \"d97a2b68-7cb0-4a5b-8324-4bea96c741dd\"\n    },\n    \"userId\": \"0b75df4d-f605-4523-88ea-58baabcee635\"\n}"
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:8080/orders/all?userId=0b75df4d-f605-4523-88ea-58baabcee635",
+			"request": {
+				"url": {
+					"raw": "http://localhost:8080/orders/all?userId=0b75df4d-f605-4523-88ea-58baabcee635",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"orders",
+						"all"
+					],
+					"query": [
+						{
+							"key": "userId",
+							"value": "0b75df4d-f605-4523-88ea-58baabcee635",
+							"equals": true,
+							"description": ""
+						}
+					],
+					"variable": []
+				},
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "localhost:8080/users/delete",
+			"request": {
+				"url": "localhost:8080/users/delete",
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"id\":\"fd587933-0f38-432e-9e80-fdd30390a473\"\n}"
+				},
+				"description": ""
+			},
+			"response": []
+		}
+	]
+}

@@ -132,9 +132,16 @@ public class UserService {
      */
     public boolean deleteUser(String id) {
 
-        String SQL = "DELETE FROM users WHERE id=?";
+        String delSQL = "DELETE FROM users WHERE id=?";
+        String getSQL = "SELECT * FROM users WHERE id=?";
         try {
-            PreparedStatement statement = conn.prepareStatement(SQL);
+            PreparedStatement ps = conn.prepareStatement(getSQL);
+            ps.setString(1, id);
+            ResultSet rs = ps.executeQuery();
+            if(!rs.next()){
+                return false;
+            }
+            PreparedStatement statement = conn.prepareStatement(delSQL);
             statement.setString(1, id);
             System.out.println(statement);
             statement.execute();
