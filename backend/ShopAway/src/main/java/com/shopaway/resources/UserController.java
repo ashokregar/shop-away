@@ -86,6 +86,21 @@ public class UserController {
 
     @POST
     @Timed
+    @Path("/delete")
+    public boolean deleteUser(String id) {
+        Connection conn = postgresConn.getConnection();
+        System.out.println(id);
+        UserService userService = new UserService(conn);
+        //check if user exist
+        boolean deleted = userService.deleteUser(id);
+
+        postgresConn.commit();
+        postgresConn.closeConnection();
+        return deleted;
+    }
+
+    @POST
+    @Timed
     @Path("/address/add")
     public Address addAddress(Address address) {
         Connection conn = postgresConn.getConnection();
@@ -101,14 +116,27 @@ public class UserController {
         return allAddress[0];
     }
 
+    @GET
+    @Timed
+    @Path("/address/get")
+    public Address getAddress(String id) {
+        Connection conn = postgresConn.getConnection();
+        System.out.println(id);
+        UserService userService = new UserService(conn);
+        Address address = userService.getAddress(id);
+        postgresConn.commit();
+        postgresConn.closeConnection();
+        System.out.println(address);
+        return address;
+    }
+
     @POST
     @Timed
     @Path("/address/delete")
-    public boolean deleteAddres(String id) {
+    public boolean deleteAddress(String id) {
         Connection conn = postgresConn.getConnection();
         System.out.println( id);
         UserService userService = new UserService(conn);
-        //check if user exist
 
         boolean deleted = userService.deleteAddress(id);
         postgresConn.commit();

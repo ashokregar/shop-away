@@ -127,6 +127,26 @@ public class UserService {
         return null;
     }
 
+    /**
+     * delete user
+     */
+    public boolean deleteUser(String id) {
+
+        String SQL = "DELETE FROM users WHERE id=?";
+        try {
+            PreparedStatement statement = conn.prepareStatement(SQL);
+            statement.setString(1, id);
+            System.out.println(statement);
+            statement.execute();
+            return true;
+
+        } catch (SQLException ex) {
+            System.out.println(ex.getMessage());
+        }
+
+        return false;
+    }
+
     public Address[] insertAddress(Address[] list){
         String SQL = "INSERT INTO addresses(id, street, state, city, pin, user_id, created_on) "
                 + "VALUES(?,?,?,?,?,?,?)";
@@ -223,7 +243,7 @@ public class UserService {
         try {
             PreparedStatement statement = conn.prepareStatement(SQL);
             statement.setString(1, id);
-            statement.executeQuery();
+            statement.execute();
             return true;
         } catch (SQLException throwables) {
             throwables.printStackTrace();
