@@ -68,14 +68,14 @@ public class UserController {
     @POST
     @Timed
     @Path("/update")
-    public Object updateUser(User user) {
+    public User updateUser(User user) {
         Connection conn = postgresConn.getConnection();
         System.out.println( user.getCreatedOn());
         UserService userService = new UserService(conn);
         //check if user exist
         List<User> users = userService.queryUser(user);
         if(users.isEmpty()){
-            return false;
+            return null;
         }
         User user1 = userService.updateUser(user);
         postgresConn.commit();
