@@ -49,6 +49,7 @@ public class ProductService {
                     stmt.setString(2, image);
                     stmt.setDate(3, new java.sql.Date(product.getCreatedOn().getTime()));
                     stmt.executeUpdate();
+                    stmt.close();
                     ids.add(uuid);
                 }
 
@@ -105,6 +106,7 @@ public class ProductService {
                 Product product1 = new Product(id, name, description, seller, price, rating, category, createdOn, images);
                 products.add(product1);
             }
+            stmt.close();
             return products;
         }catch (SQLException e){
             e.printStackTrace();
@@ -143,6 +145,7 @@ public class ProductService {
                 Product product1 = new Product(id, name, description, seller, price, rating, category, createdOn, images);
                 products.add(product1);
             }
+            stmt.close();
             return products;
         }catch (SQLException e){
             e.printStackTrace();

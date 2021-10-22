@@ -6,6 +6,7 @@ import com.shopaway.pojo.Product;
 import com.shopaway.pojo.User;
 import com.shopaway.resources.ProductController;
 import com.shopaway.resources.UserController;
+import com.shopaway.service.ProductService;
 import org.junit.jupiter.api.*;
 
 import java.sql.Connection;
@@ -46,8 +47,8 @@ public class ProductTest {
     @Order(1)
     @DisplayName("Should return all products")
     public void GetAllProductsTest(){
-        ProductController productController = new ProductController(postgresConn);
-        List<Product> products = productController.getProduct(null);
+        ProductService productService = new ProductService(postgresConn.conn);
+        List<Product> products = productService.queryProductsFromCategory(null);
         Assertions.assertTrue(products.size() > 0);
         int index = (int) (products.size() - (Math.random() * products.size()));
         System.out.println("size: "+ products.size());
@@ -59,11 +60,23 @@ public class ProductTest {
     @Order(2)
     @DisplayName("Should return all products for a category")
     public void GetProductsWithCategory(){
-        ProductController productController = new ProductController(postgresConn);
+        ProductService productService = new ProductService(postgresConn.conn);
         System.out.println("category: "+ category);
-        List<Product> products = productController.getProduct(category);
+        List<Product> products = productService.queryProductsFromCategory(category);
         Object[] categories = products.stream().filter(product ->  !product.getCategory().equals(category)).toArray();
-        Assertions.assertTrue(categories.length == 0);
+        Assertions.assertAll(() -> Assertions.assertTrue(categories.length == 0), () -> Assertions.assertTrue(products.size() > 0));
+    }
+
+
+    @Test
+    @Order(3)
+    @DisplayName("Should return empty list for a unknown category")
+    public void GetProductsWithUnknownCategory(){
+        ProductService productService = new ProductService(postgresConn.conn);
+        String unKnownCategory = category + "un-known";
+        System.out.println("category: "+ unKnownCategory);
+        List<Product> products = productService.queryProductsFromCategory(unKnownCategory);
+        Assertions.assertTrue(products.size() == 0);
     }
 
 

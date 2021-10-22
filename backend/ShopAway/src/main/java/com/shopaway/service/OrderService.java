@@ -48,6 +48,7 @@ public class OrderService {
                 order.setId(id);
                 orders.add(order);
             }
+            stmt.close();
             return orders.get(0);
         }catch (SQLException e){
             e.printStackTrace();
@@ -84,6 +85,7 @@ public class OrderService {
                 order.setId(id);
                 orders.add(order);
             }
+            stmt.close();
             return orders;
         }catch (SQLException e){
             e.printStackTrace();
@@ -125,6 +127,7 @@ public class OrderService {
 
             System.out.println(statement);
             statement.execute();
+            statement.close();
             order.setProducts(products.toArray(new Product[0]));
             order.setId(uuid);
             order.setCreatedOn(new Date(millis));

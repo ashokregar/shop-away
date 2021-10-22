@@ -5,7 +5,7 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 
 public class PostgresConn {
-    private Connection conn;
+    public Connection conn;
     final String jdbcUrl = "jdbc:postgresql://localhost:5432/shopaway";
 
     public PostgresConn(){

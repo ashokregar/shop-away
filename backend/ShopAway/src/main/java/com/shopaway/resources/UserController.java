@@ -33,15 +33,15 @@ public class UserController {
         System.out.println(user.getPassword());
 
         UserService userService = new UserService(conn);
-        List<User> users = userService.queryUser(user);
-        System.out.println(users);
-        List<Address> addresses = userService.getAddressesOfUser(users.get(0).getId());
+        User user1 = userService.queryUser(user);
+        System.out.println(user1);
+        List<Address> addresses = userService.getAddressesOfUser(user1.getId());
         System.out.println(addresses);
 
         postgresConn.commit();
         postgresConn.closeConnection();
         Map <String, Object> result = new HashMap<>();
-        result.put("user", users.get(0));
+        result.put("user", user1);
         result.put("addresses", addresses);
         return  result;
     }
@@ -54,11 +54,11 @@ public class UserController {
         System.out.println( user);
         UserService userService = new UserService(conn);
         //check if user exist
-        List<User> users = userService.queryUser(user);
-        if(!users.isEmpty()){
+        User user1 = userService.queryUser(user);
+        if(user1 == null){
             return "User already exist!";
         }
-        User user1 = userService.insertUser(user);
+        user1 = userService.insertUser(user);
         postgresConn.commit();
         postgresConn.closeConnection();
         System.out.println(user1);
@@ -73,11 +73,11 @@ public class UserController {
         System.out.println( user.getCreatedOn());
         UserService userService = new UserService(conn);
         //check if user exist
-        List<User> users = userService.queryUser(user);
-        if(users.isEmpty()){
+        User user1 = userService.queryUser(user);
+        if(user1 == null){
             return null;
         }
-        User user1 = userService.updateUser(user);
+        user1 = userService.updateUser(user);
         postgresConn.commit();
         postgresConn.closeConnection();
         System.out.println(user1);
@@ -106,14 +106,12 @@ public class UserController {
         Connection conn = postgresConn.getConnection();
         System.out.println(address);
         UserService userService = new UserService(conn);
-        //check if user exist
-        Address[] addresses = new Address[1];
-        addresses[0] = address;
-        Address[] allAddress = userService.insertAddress(addresses);
+
+        Address address1 = userService.insertAddress(address);
         postgresConn.commit();
         postgresConn.closeConnection();
-        System.out.println(allAddress);
-        return allAddress[0];
+        System.out.println(address1);
+        return address1;
     }
 
     @GET

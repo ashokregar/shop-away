@@ -18,8 +18,8 @@ public class UserService {
     /**
      * get multiple user
      */
-    public List<User> queryUser(User userCred) {
-        String SQL = "SELECT * FROM users WHERE username=? AND password=?";
+    public User queryUser(User userCred) {
+        String SQL = "SELECT * FROM users WHERE username=? AND password=? LIMIT 1";
 
         PreparedStatement stmt = null;
         List<User> users = new ArrayList<>();
@@ -46,13 +46,15 @@ public class UserService {
                 stmt1.setString(3, password);
                 System.out.println(stmt1);
                 stmt1.execute();
+                stmt1.close();
 
                 User user = new User(name, username, password, email, mobile, createdOn, new java.util.Date(System.currentTimeMillis()));
                 user.setId(id);
                 users.add(user);
 
             }
-            return users;
+            stmt.close();
+            return users.get(0);
         }catch (SQLException e){
             e.printStackTrace();
         }
@@ -65,22 +67,22 @@ public class UserService {
      */
     public User updateUser(User user) {
 
-        String SQL = "INSERT INTO users(id, name, username, password, mobile, email, created_on, last_login) "
-                + "VALUES(?,?,?,?,?,?,?,?)";
+        String SQL = "UPDATE users SET name=?, username=?, password=?, mobile=?, email=?, created_on=?, last_login=? WHERE id=?";
         try {
             PreparedStatement statement = conn.prepareStatement(SQL);
-            statement.setString(1, user.getId());
-            statement.setString(2, user.getName());
-            statement.setString(3, user.getUsername());
-            statement.setString(4, user.getPassword());
-            statement.setString(5, user.getMobile());
-            statement.setString(6, user.getEmail());
+            statement.setString(1, user.getName());
+            statement.setString(2, user.getUsername());
+            statement.setString(3, user.getPassword());
+            statement.setString(4, user.getMobile());
+            statement.setString(5, user.getEmail());
             long millis=System.currentTimeMillis();
+            statement.setDate(6, new java.sql.Date(millis));
             statement.setDate(7, new java.sql.Date(millis));
-            statement.setDate(8, new java.sql.Date(millis));
+            statement.setString(8, user.getId());
 
             System.out.println(statement);
             statement.execute();
+            statement.close();
             user.setId(user.getId());
             user.setCreatedOn(new java.util.Date(millis));
             user.setLastLogin(new java.util.Date(millis));
@@ -115,6 +117,7 @@ public class UserService {
 
             System.out.println(statement);
             statement.execute();
+            statement.close();
             user.setId(uuid);
             user.setCreatedOn(new java.util.Date(millis));
             user.setLastLogin(new java.util.Date(millis));
@@ -141,10 +144,12 @@ public class UserService {
             if(!rs.next()){
                 return false;
             }
+            ps.close();
             PreparedStatement statement = conn.prepareStatement(delSQL);
             statement.setString(1, id);
             System.out.println(statement);
             statement.execute();
+            statement.close();
             return true;
 
         } catch (SQLException ex) {
@@ -154,33 +159,26 @@ public class UserService {
         return false;
     }
 
-    public Address[] insertAddress(Address[] list){
+    public Address insertAddress(Address address){
         String SQL = "INSERT INTO addresses(id, street, state, city, pin, user_id, created_on) "
                 + "VALUES(?,?,?,?,?,?,?)";
-        try (PreparedStatement statement = conn.prepareStatement(SQL);) {
-            int count = 0;
-            for (Address address : list) {
-                String uuid = String.valueOf(UUID.randomUUID());
-                statement.setString(1, uuid);
-                statement.setString(2, address.getStreet());
-                statement.setString(3, address.getState());
-                statement.setString(4, address.getCity());
-                statement.setInt(5, address.getPin());
-                statement.setString(6, address.getUserId());
-                long millis = System.currentTimeMillis();
-                statement.setDate(7, new java.sql.Date(millis));
-                address.setId(uuid);
-                address.setCreatedOn(new java.util.Date(millis));
+        try {
+            PreparedStatement statement = conn.prepareStatement(SQL);
+            String uuid = String.valueOf(UUID.randomUUID());
+            statement.setString(1, uuid);
+            statement.setString(2, address.getStreet());
+            statement.setString(3, address.getState());
+            statement.setString(4, address.getCity());
+            statement.setInt(5, address.getPin());
+            statement.setString(6, address.getUserId());
+            long millis = System.currentTimeMillis();
+            statement.setDate(7, new java.sql.Date(millis));
+            address.setId(uuid);
+            address.setCreatedOn(new java.util.Date(millis));
 
-                statement.addBatch();
-                count++;
-                // execute every 100 rows or less
-                if (count % 100 == 0 || count == list.length) {
-                    statement.executeBatch();
-                }
-            }
-
-            return list;
+            statement.execute();
+            statement.close();
+            return address;
 
         } catch (SQLException ex) {
             System.out.println(ex.getMessage());
@@ -193,7 +191,7 @@ public class UserService {
         String SQL = "SELECT * FROM addresses WHERE id LIKE '%' || '" + id + "' || '%'";
         System.out.println(SQL);
         Statement stmt = null;
-        List<Address> images = new ArrayList<>();
+        List<Address> addresses = new ArrayList<>();
         try{
             stmt = conn.createStatement();
             ResultSet rs = stmt.executeQuery(SQL);
@@ -207,9 +205,10 @@ public class UserService {
 
                 Address address = new Address(street, city, state, pin, createdOn, userId);
                 address.setId(id);
-                images.add(address);
+                addresses.add(address);
             }
-            return images.get(0);
+            stmt.close();
+            return addresses.get(0);
         }catch (SQLException e){
             e.printStackTrace();
         }
@@ -237,7 +236,7 @@ public class UserService {
                 address.setId(id);
                 addresses.add(address);
             }
-
+            stmt.close();
             return addresses;
         }catch (SQLException e){
             e.printStackTrace();
@@ -251,6 +250,7 @@ public class UserService {
             PreparedStatement statement = conn.prepareStatement(SQL);
             statement.setString(1, id);
             statement.execute();
+            statement.close();
             return true;
         } catch (SQLException throwables) {
             throwables.printStackTrace();
